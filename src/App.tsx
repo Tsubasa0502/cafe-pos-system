@@ -1,50 +1,45 @@
+import { useState } from "react";
+
+import Header from "./components/Header";
+import CategoryMenu from "./components/CategoryMenu";
+import ProductList from "./components/ProductList";
+
+import { products } from "./data/products";
+import type { Product } from "./data/products";
+
 function App() {
+  const [selectedCategory, setSelectedCategory] =
+    useState("Coffee");
+
+  function handleCategoryChange(category: string) {
+    setSelectedCategory(category);
+  }
+
+  function handleAdd(product: Product) {
+    console.log("Added:", product.name);
+  }
+
+  const filteredProducts = products.filter(
+    (product) => product.category === selectedCategory
+  );
+
   return (
-    <div>
-      <h1>☕ Cafe POS</h1>
+    <div className="app">
+      <Header />
 
-      <div>
-        <h2>Categories</h2>
-        <button>All</button>
-        <button>Coffee</button>
-        <button>Drinks</button>
-        <button>Food</button>
-      </div>
+      <main className="pos-layout">
+        <CategoryMenu
+          selectedCategory={selectedCategory}
+          onCategoryChange={handleCategoryChange}
+        />
 
-      <div>
-        <h2>Products</h2>
-
-        <div>
-          <h3>Latte</h3>
-          <p>$5.00</p>
-          <button>Add</button>
-        </div>
-
-        <div>
-          <h3>Americano</h3>
-          <p>$4.00</p>
-          <button>Add</button>
-        </div>
-
-        <div>
-          <h3>Cappuccino</h3>
-          <p>$5.00</p>
-          <button>Add</button>
-        </div>
-      </div>
-
-      <div>
-        <h2>Current Order</h2>
-        <p>No items yet</p>
-
-        <hr />
-
-        <p>Subtotal: $0.00</p>
-        <p>Tax: $0.00</p>
-        <h3>Total: $0.00</h3>
-
-        <button>CHECKOUT</button>
-      </div>
+        <section className="products-area">
+          <ProductList
+            products={filteredProducts}
+            onAdd={handleAdd}
+          />
+        </section>
+      </main>
     </div>
   );
 }
